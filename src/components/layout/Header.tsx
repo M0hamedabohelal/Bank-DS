@@ -32,30 +32,30 @@ export const Header: React.FC<HeaderProps> = ({ onToggleDrawer, isDrawerOpen }) 
 
   return (
     <header className="sticky top-0 z-30 border-b theme-border backdrop-blur-md theme-surface transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 sm:py-3 flex flex-wrap items-center justify-between gap-2 sm:gap-4">
         {/* Brand / Logo */}
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-sky-500/20 font-bold text-lg">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-sky-500/20 font-bold text-sm sm:text-lg shrink-0">
             DS
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-base sm:text-lg font-bold tracking-tight theme-text-primary">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <h1 className="text-sm sm:text-lg font-bold tracking-tight theme-text-primary">
                 CS314 Data Science
               </h1>
-              <span className="hidden xs:inline-flex text-[11px] font-semibold px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-600 dark:text-sky-400 border border-sky-500/20">
+              <span className="text-[10px] sm:text-[11px] font-semibold px-1.5 sm:px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-600 dark:text-sky-400 border border-sky-500/20 shrink-0">
                 100 سؤال
               </span>
             </div>
-            <p className="text-xs theme-text-muted">
+            <p className="text-[11px] sm:text-xs theme-text-muted hidden xs:block">
               بنك الأسئلة والشروحات العربية التفاعلية
             </p>
           </div>
         </div>
 
-        {/* Live Quiz Stats */}
+        {/* Live Quiz Stats (Tablet/Desktop) */}
         {mode !== 'study' && (
-          <div className="hidden md:flex items-center gap-3 px-3 py-1.5 rounded-2xl theme-muted-box border text-xs font-medium">
+          <div className="hidden lg:flex items-center gap-3 px-3 py-1.5 rounded-2xl theme-muted-box border text-xs font-medium">
             <div className="flex items-center gap-1.5 theme-text-secondary">
               <span className="w-2 h-2 rounded-full bg-sky-500"></span>
               <span>المجاب:</span>
@@ -81,7 +81,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleDrawer, isDrawerOpen }) 
                 <button
                   onClick={handleHeaderReset}
                   className="flex items-center gap-1 text-[11px] text-rose-500 hover:text-rose-600 hover:underline transition-all"
-                  title="تصفح الكويز من البداية وتصفير الإجابات"
+                  title="تصفير الإجابات"
                 >
                   {resetHeaderToast ? (
                     <>
@@ -101,29 +101,29 @@ export const Header: React.FC<HeaderProps> = ({ onToggleDrawer, isDrawerOpen }) 
         )}
 
         {/* Action Controls & Theme */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           {/* Theme & Font Size Selector */}
           <ThemeSelector />
 
-          <div className="h-6 w-px theme-border bg-current opacity-20 mx-1 hidden sm:block"></div>
+          <div className="h-5 sm:h-6 w-px theme-border bg-current opacity-20 mx-0.5 sm:mx-1"></div>
 
           {/* Auto Next on Correct Toggle Button */}
           {mode !== 'study' && (
             <button
               onClick={() => setAutoNext(!autoNext)}
-              className={`p-2 rounded-xl transition-all border flex items-center gap-1 text-xs font-semibold ${
+              className={`p-1.5 sm:p-2 rounded-xl transition-all border flex items-center gap-1 text-xs font-semibold ${
                 autoNext
-                  ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/40 ring-1 ring-emerald-500/30'
+                  ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/40'
                   : 'theme-muted-box border opacity-60 hover:opacity-100'
               }`}
               title={
                 autoNext
-                  ? 'النقل التلقائي مفعل (ينتقل للسؤال التالي فور اختيار الإجابة الصحيحة)'
+                  ? 'النقل التلقائي مفعل'
                   : 'تفعيل النقل التلقائي عند الإجابة الصحيحة'
               }
             >
-              <Zap className={`w-4 h-4 ${autoNext ? 'fill-current' : ''}`} />
-              <span className="hidden xl:inline">
+              <Zap className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${autoNext ? 'fill-current' : ''}`} />
+              <span className="hidden xl:inline text-xs">
                 {autoNext ? 'نقل تلقائي: مفعل ⚡' : 'نقل تلقائي: معطل'}
               </span>
             </button>
@@ -132,30 +132,30 @@ export const Header: React.FC<HeaderProps> = ({ onToggleDrawer, isDrawerOpen }) 
           {/* Quick Sound Toggle */}
           <button
             onClick={() => setSoundEnabled(!soundEnabled)}
-            className={`p-2 rounded-xl transition-all border ${
+            className={`p-1.5 sm:p-2 rounded-xl transition-all border ${
               soundEnabled
                 ? 'bg-sky-500/15 text-sky-600 dark:text-sky-400 border-sky-500/30'
                 : 'theme-muted-box border opacity-60 hover:opacity-100'
             }`}
             title={soundEnabled ? 'كتم الصوت التفاعلي' : 'تفعيل المؤثرات الصوتية'}
           >
-            {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+            {soundEnabled ? <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
           </button>
 
           {/* Instant Explanation Toggle */}
           {mode !== 'study' && (
             <button
               onClick={() => setInstantFeedback(!instantFeedback)}
-              className={`p-2 rounded-xl transition-all border flex items-center gap-1 text-xs font-semibold ${
+              className={`p-1.5 sm:p-2 rounded-xl transition-all border flex items-center gap-1 text-xs font-semibold ${
                 instantFeedback
                   ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/30'
                   : 'theme-muted-box border opacity-60 hover:opacity-100'
               }`}
               title={instantFeedback ? 'الشرح الفوري مفعل' : 'تفعيل الشرح الفوري عند الإجابة'}
             >
-              <Lightbulb className="w-4 h-4" />
-              <span className="hidden lg:inline">
-                {instantFeedback ? 'شرح فوري: مفعل' : 'شرح فوري: معطل'}
+              <Lightbulb className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span className="hidden lg:inline text-xs">
+                {instantFeedback ? 'شرح فوري' : 'بدون شرح'}
               </span>
             </button>
           )}
@@ -163,16 +163,16 @@ export const Header: React.FC<HeaderProps> = ({ onToggleDrawer, isDrawerOpen }) 
           {/* Questions Grid Drawer Button */}
           <button
             onClick={onToggleDrawer}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition-all ${
+            className={`flex items-center gap-1 sm:gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-xs font-semibold border transition-all ${
               isDrawerOpen
                 ? 'bg-sky-500 text-white border-sky-600 shadow-sm'
                 : 'theme-muted-box border hover:opacity-100 opacity-80'
             }`}
             title="فهرس الأسئلة والتنقل السريع"
           >
-            <Grid className="w-4 h-4" />
-            <span className="hidden sm:inline">فهرس الأسئلة</span>
-            <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-black/10 dark:bg-white/10">
+            <Grid className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline text-xs">فهرس</span>
+            <span className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-black/10 dark:bg-white/10">
               {questions.length}
             </span>
           </button>

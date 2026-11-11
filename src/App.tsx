@@ -28,7 +28,7 @@ const QuizMainContent: React.FC = () => {
         <ChapterTabs />
 
         {/* Main Quiz Area */}
-        <main className="max-w-4xl mx-auto px-4 sm:px-6 pt-6 sm:pt-8 w-full">
+        <main className="max-w-4xl mx-auto px-3 sm:px-6 pt-4 sm:pt-6 w-full">
           {mode === 'study' ? (
             <StudyBrowseView />
           ) : (
