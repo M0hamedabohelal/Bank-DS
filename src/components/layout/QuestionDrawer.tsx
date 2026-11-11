@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuiz } from '../../context/QuizContext';
-import { X, Check, Bookmark, AlertCircle, HelpCircle } from 'lucide-react';
+import { X } from 'lucide-react';
 
 interface QuestionDrawerProps {
   isOpen: boolean;
@@ -21,32 +21,32 @@ export const QuestionDrawer: React.FC<QuestionDrawerProps> = ({ isOpen, onClose 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-xs transition-opacity animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex justify-end bg-black/50 backdrop-blur-xs transition-opacity animate-in fade-in duration-200">
       {/* Backdrop click */}
       <div className="absolute inset-0" onClick={onClose} />
 
       {/* Drawer content */}
-      <div className="relative w-full max-w-md h-full bg-white dark:bg-slate-900 shadow-2xl flex flex-col border-r border-black/10 dark:border-white/10 z-10 animate-in slide-in-from-right duration-250">
+      <div className="relative w-full max-w-md h-full theme-surface shadow-2xl flex flex-col border-r theme-border z-10 animate-in slide-in-from-right duration-250">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-black/10 dark:border-white/10">
+        <div className="flex items-center justify-between p-4 border-b theme-border">
           <div>
-            <h2 className="text-base font-bold text-slate-900 dark:text-white">
+            <h2 className="text-base font-bold theme-text-primary">
               فهرس الأسئلة والتنقل السريع
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs theme-text-muted">
               إجمالي {questions.length} سؤال متاح
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors"
+            className="p-1.5 rounded-xl theme-muted-box border hover:opacity-100 opacity-70 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Legend */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 p-3 bg-slate-50 dark:bg-slate-800/50 border-b border-black/5 dark:border-white/5 text-[11px]">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 p-3 theme-muted-box border-b text-[11px]">
           <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-medium">
             <span className="w-3 h-3 rounded-full bg-emerald-500"></span>
             <span>صحيحة</span>
@@ -74,7 +74,7 @@ export const QuestionDrawer: React.FC<QuestionDrawerProps> = ({ isOpen, onClose 
               const isCorrect = answers[q.id] === q.correctAnswer;
               const isBookmarked = bookmarks.has(q.id);
 
-              let buttonStyle = 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-black/5 dark:border-white/5 hover:border-sky-400';
+              let buttonStyle = 'theme-muted-box border hover:border-sky-500';
 
               if (hasAnswered) {
                 if (instantFeedback || isExamSubmitted) {
@@ -117,7 +117,7 @@ export const QuestionDrawer: React.FC<QuestionDrawerProps> = ({ isOpen, onClose 
         </div>
 
         {/* Footer info */}
-        <div className="p-4 border-t border-black/10 dark:border-white/10 bg-slate-50 dark:bg-slate-800/50 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+        <div className="p-4 border-t theme-border theme-muted-box flex items-center justify-between text-xs theme-text-muted">
           <span>يمكنك الضغط على أي رقم للانتقال له مباشرة</span>
         </div>
       </div>

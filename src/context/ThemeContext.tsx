@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { ThemeMode } from '../types/quiz';
+import type { ThemeMode } from '../types/quiz';
 
 interface ThemeContextType {
   theme: ThemeMode;
@@ -22,8 +22,17 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   });
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
+    const root = document.documentElement;
+    root.setAttribute('data-theme', theme);
     localStorage.setItem('cs314_theme', theme);
+
+    if (theme === 'dark' || theme === 'nordic') {
+      root.classList.add('dark');
+      root.classList.remove('light');
+    } else {
+      root.classList.remove('dark');
+      root.classList.add('light');
+    }
   }, [theme]);
 
   useEffect(() => {

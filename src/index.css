@@ -1,95 +1,90 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-theme="dark"] *, [data-theme="nordic"] *, .dark *));
+
 @layer base {
-  :root {
+  :root, [data-theme="light"] {
     --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     --font-arabic: 'Cairo', 'Tajawal', system-ui, -apple-system, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
 
-    /* Light Theme (Default) */
+    /* Light Theme (Crisp Clean White/Slate) */
     --bg-primary: #f8fafc;
     --bg-surface: #ffffff;
     --bg-card: #ffffff;
+    --bg-card-hover: #f1f5f9;
     --bg-muted: #f1f5f9;
     --bg-accent: #e2e8f0;
     --text-primary: #0f172a;
     --text-secondary: #475569;
-    --text-muted: #94a3b8;
+    --text-muted: #64748b;
     --border-color: #e2e8f0;
+    --border-subtle: #f1f5f9;
     --primary-color: #0284c7;
-    --primary-hover: #0369a1;
     --primary-light: #e0f2fe;
-    --success-bg: #ecfdf5;
-    --success-border: #10b981;
-    --success-text: #065f46;
-    --error-bg: #fef2f2;
-    --error-border: #ef4444;
-    --error-text: #991b1b;
+    --option-bg: #f8fafc;
+    --option-border: #e2e8f0;
+    --option-hover: #f1f5f9;
   }
 
-  [data-theme="dark"] {
-    --bg-primary: #090d16;
+  [data-theme="dark"], .dark {
+    /* Dark Theme (Midnight Slate) */
+    --bg-primary: #0b0f19;
     --bg-surface: #111827;
-    --bg-card: #172033;
-    --bg-muted: #1f293d;
-    --bg-accent: #29354d;
-    --text-primary: #f1f5f9;
+    --bg-card: #162032;
+    --bg-card-hover: #1e293b;
+    --bg-muted: #1e293b;
+    --bg-accent: #2c3b52;
+    --text-primary: #f8fafc;
     --text-secondary: #cbd5e1;
-    --text-muted: #64748b;
-    --border-color: #27354f;
+    --text-muted: #94a3b8;
+    --border-color: #26354d;
+    --border-subtle: #1c273a;
     --primary-color: #38bdf8;
-    --primary-hover: #0ea5e9;
-    --primary-light: #082f49;
-    --success-bg: #064e3b;
-    --success-border: #10b981;
-    --success-text: #a7f3d0;
-    --error-bg: #7f1d1d;
-    --error-border: #ef4444;
-    --error-text: #fecaca;
+    --primary-light: #0c2d48;
+    --option-bg: #131c2c;
+    --option-border: #223047;
+    --option-hover: #1b263b;
   }
 
   [data-theme="sepia"] {
-    /* Eye-Care Warm Paper */
+    /* Eye-Care Warm Paper (Comforting Amber & Cream) */
     --bg-primary: #fbf7ee;
     --bg-surface: #f4ede0;
-    --bg-card: #ffffff;
-    --bg-muted: #ece3d2;
-    --bg-accent: #e2d6c1;
-    --text-primary: #3d3023;
-    --text-secondary: #5e4c39;
-    --text-muted: #8c7863;
-    --border-color: #dfd2be;
-    --primary-color: #c25e1a;
-    --primary-hover: #9a4812;
+    --bg-card: #fefbf6;
+    --bg-card-hover: #f7efe1;
+    --bg-muted: #ede2cf;
+    --bg-accent: #dfd1bb;
+    --text-primary: #382c1e;
+    --text-secondary: #5c4a35;
+    --text-muted: #857057;
+    --border-color: #dfd2bd;
+    --border-subtle: #e9decb;
+    --primary-color: #b45309;
     --primary-light: #fef3c7;
-    --success-bg: #f0fdf4;
-    --success-border: #15803d;
-    --success-text: #166534;
-    --error-bg: #fff1f2;
-    --error-border: #be123c;
-    --error-text: #9f1239;
+    --option-bg: #f7f1e5;
+    --option-border: #dfd2bd;
+    --option-hover: #f0e6d4;
   }
 
   [data-theme="nordic"] {
-    /* Nordic Navy Calm */
-    --bg-primary: #0c1524;
-    --bg-surface: #132238;
-    --bg-card: #182a45;
-    --bg-muted: #1f3454;
-    --bg-accent: #263f64;
+    /* Nordic Navy Calm (Deep Oceanic Slate & Cyan) */
+    --bg-primary: #0b1324;
+    --bg-surface: #101c33;
+    --bg-card: #152442;
+    --bg-card-hover: #1a2d52;
+    --bg-muted: #1a2c4e;
+    --bg-accent: #253e6d;
     --text-primary: #e6f1ff;
-    --text-secondary: #a8c1e5;
+    --text-secondary: #a3bfdb;
     --text-muted: #627d98;
-    --border-color: #223c61;
-    --primary-color: #2dd4bf;
-    --primary-hover: #14b8a6;
-    --primary-light: #134e4a;
-    --success-bg: #064e3b;
-    --success-border: #10b981;
-    --success-text: #a7f3d0;
-    --error-bg: #7f1d1d;
-    --error-border: #ef4444;
-    --error-text: #fecaca;
+    --border-color: #20365b;
+    --border-subtle: #182a47;
+    --primary-color: #14b8a6;
+    --primary-light: #0d3635;
+    --option-bg: #12203a;
+    --option-border: #1e3357;
+    --option-hover: #182b4d;
   }
 }
 
@@ -97,6 +92,52 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   font-family: var(--font-arabic);
+  min-height: 100vh;
+}
+
+/* Custom Semantic Theme Classes that dynamically respond to data-theme */
+.theme-card {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.theme-surface {
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.theme-muted-box {
+  background-color: var(--bg-muted);
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+}
+
+.theme-option {
+  background-color: var(--option-bg);
+  border-color: var(--option-border);
+  color: var(--text-primary);
+}
+.theme-option:hover {
+  background-color: var(--option-hover);
+  border-color: var(--primary-color);
+}
+
+.theme-text-primary {
+  color: var(--text-primary);
+}
+
+.theme-text-secondary {
+  color: var(--text-secondary);
+}
+
+.theme-text-muted {
+  color: var(--text-muted);
+}
+
+.theme-border {
+  border-color: var(--border-color);
 }
 
 .font-english {
@@ -107,13 +148,13 @@ body {
   font-family: var(--font-mono);
 }
 
-/* Custom scrollbar */
+/* Custom scrollbars */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-muted);
+  background: var(--bg-primary);
 }
 ::-webkit-scrollbar-thumb {
   background: var(--border-color);

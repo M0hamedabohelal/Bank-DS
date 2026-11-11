@@ -1,67 +1,81 @@
 import React from 'react';
 import { useTheme } from '../../context/ThemeContext';
-import { ThemeMode } from '../../types/quiz';
-import { Sun, Moon, Eye, Compass, Type } from 'lucide-react';
+import type { ThemeMode } from '../../types/quiz';
+import { Sun, Moon, Eye, Compass } from 'lucide-react';
 
 export const ThemeSelector: React.FC = () => {
   const { theme, setTheme, fontSize, setFontSize } = useTheme();
 
-  const themes: { id: ThemeMode; label: string; icon: React.ReactNode; bg: string }[] = [
+  const themes: {
+    id: ThemeMode;
+    label: string;
+    icon: React.ReactNode;
+    activeStyle: string;
+    dotColor: string;
+  }[] = [
     {
       id: 'light',
       label: 'ناصع نهاري',
-      icon: <Sun className="w-4 h-4 text-amber-500" />,
-      bg: 'bg-white border-slate-200 text-slate-800',
+      icon: <Sun className="w-3.5 h-3.5 text-amber-500" />,
+      activeStyle: 'bg-white text-slate-900 border-amber-300 shadow-sm ring-1 ring-amber-400/40',
+      dotColor: 'bg-amber-400',
     },
     {
       id: 'dark',
       label: 'ليلي مريح',
-      icon: <Moon className="w-4 h-4 text-indigo-400" />,
-      bg: 'bg-slate-900 border-slate-700 text-slate-100',
+      icon: <Moon className="w-3.5 h-3.5 text-indigo-400" />,
+      activeStyle: 'bg-slate-800 text-white border-indigo-500 shadow-sm ring-1 ring-indigo-400/40',
+      dotColor: 'bg-indigo-400',
     },
     {
       id: 'sepia',
       label: 'حماية العين',
-      icon: <Eye className="w-4 h-4 text-amber-700" />,
-      bg: 'bg-[#fbf7ee] border-[#dfd2be] text-[#3d3023]',
+      icon: <Eye className="w-3.5 h-3.5 text-amber-700 dark:text-amber-300" />,
+      activeStyle: 'bg-[#fefbf6] text-[#3d2b1a] border-[#b45309] shadow-sm ring-1 ring-[#b45309]/30 font-bold',
+      dotColor: 'bg-amber-600',
     },
     {
       id: 'nordic',
       label: 'أزرق هادئ',
-      icon: <Compass className="w-4 h-4 text-teal-400" />,
-      bg: 'bg-[#0c1524] border-[#223c61] text-[#e6f1ff]',
+      icon: <Compass className="w-3.5 h-3.5 text-teal-400" />,
+      activeStyle: 'bg-[#152442] text-teal-200 border-teal-500 shadow-sm ring-1 ring-teal-400/40 font-bold',
+      dotColor: 'bg-teal-400',
     },
   ];
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      {/* Theme Options */}
-      <div className="inline-flex p-1 rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 backdrop-blur-sm">
-        {themes.map((t) => (
-          <button
-            key={t.id}
-            onClick={() => setTheme(t.id)}
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
-              theme === t.id
-                ? 'bg-white dark:bg-slate-800 shadow-sm font-semibold scale-102 text-current'
-                : 'opacity-70 hover:opacity-100 text-current'
-            }`}
-            title={t.label}
-          >
-            {t.icon}
-            <span className="hidden sm:inline">{t.label}</span>
-          </button>
-        ))}
+      {/* Themes Buttons */}
+      <div className="inline-flex items-center gap-1 p-1 rounded-2xl theme-muted-box border">
+        {themes.map((t) => {
+          const isActive = theme === t.id;
+          return (
+            <button
+              key={t.id}
+              onClick={() => setTheme(t.id)}
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs transition-all border ${
+                isActive
+                  ? `${t.activeStyle} font-bold scale-102`
+                  : 'border-transparent theme-text-secondary hover:theme-text-primary hover:bg-black/5 dark:hover:bg-white/5 opacity-80 hover:opacity-100'
+              }`}
+              title={t.label}
+            >
+              <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
+              {t.icon}
+              <span className="hidden sm:inline">{t.label}</span>
+            </button>
+          );
+        })}
       </div>
 
       {/* Font Size Selector */}
-      <div className="inline-flex p-1 rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10">
+      <div className="inline-flex items-center gap-0.5 p-1 rounded-2xl theme-muted-box border">
         <button
           onClick={() => setFontSize('normal')}
-          className={`px-2 py-1 rounded-lg text-xs font-medium transition-all ${
+          className={`px-2 py-1 rounded-lg text-xs transition-all border ${
             fontSize === 'normal'
-              ? 'bg-white dark:bg-slate-800 shadow-sm font-bold text-current'
-              : 'opacity-60 hover:opacity-100 text-current'
+              ? 'bg-sky-500 text-white font-bold border-sky-600 shadow-xs'
+              : 'border-transparent theme-text-secondary hover:theme-text-primary hover:bg-black/5 dark:hover:bg-white/5'
           }`}
           title="حجم خط عادي"
         >
@@ -69,10 +83,10 @@ export const ThemeSelector: React.FC = () => {
         </button>
         <button
           onClick={() => setFontSize('large')}
-          className={`px-2 py-1 rounded-lg text-sm font-bold transition-all ${
+          className={`px-2 py-1 rounded-lg text-xs transition-all border ${
             fontSize === 'large'
-              ? 'bg-white dark:bg-slate-800 shadow-sm font-extrabold text-current'
-              : 'opacity-60 hover:opacity-100 text-current'
+              ? 'bg-sky-500 text-white font-extrabold border-sky-600 shadow-xs'
+              : 'border-transparent theme-text-secondary hover:theme-text-primary hover:bg-black/5 dark:hover:bg-white/5'
           }`}
           title="حجم خط كبير"
         >
@@ -80,10 +94,10 @@ export const ThemeSelector: React.FC = () => {
         </button>
         <button
           onClick={() => setFontSize('huge')}
-          className={`px-2 py-1 rounded-lg text-base font-extrabold transition-all ${
+          className={`px-2 py-1 rounded-lg text-xs transition-all border ${
             fontSize === 'huge'
-              ? 'bg-white dark:bg-slate-800 shadow-sm font-black text-current'
-              : 'opacity-60 hover:opacity-100 text-current'
+              ? 'bg-sky-500 text-white font-black border-sky-600 shadow-xs'
+              : 'border-transparent theme-text-secondary hover:theme-text-primary hover:bg-black/5 dark:hover:bg-white/5'
           }`}
           title="حجم خط ضخم مريح جداً"
         >

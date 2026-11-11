@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useQuiz } from '../../context/QuizContext';
-import { ChoiceKey } from '../../types/quiz';
+import type { ChoiceKey } from '../../types/quiz';
 import { ExplanationCard } from './ExplanationCard';
-import { Bookmark, Copy, Check, CheckCircle2, XCircle, Terminal, HelpCircle } from 'lucide-react';
+import { Bookmark, Copy, Check, CheckCircle2, XCircle, Terminal } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 
 export const QuestionCard: React.FC = () => {
@@ -31,7 +31,6 @@ export const QuestionCard: React.FC = () => {
   // Keyboard navigation & shortcuts (A, B, C, D, Arrows)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Ignore if user is in an input or textarea
       if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) return;
 
       const key = e.key.toUpperCase();
@@ -72,17 +71,17 @@ export const QuestionCard: React.FC = () => {
   const optionKeys: ChoiceKey[] = ['A', 'B', 'C', 'D'];
 
   return (
-    <div className="w-full bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-8 shadow-sm border border-black/8 dark:border-white/8 transition-all">
+    <div className="w-full theme-card rounded-3xl p-5 sm:p-8 shadow-sm border transition-all">
       {/* Top Meta Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-black/5 dark:border-white/5">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b theme-border">
         <div className="flex items-center gap-2">
-          <span className="px-3 py-1 rounded-xl bg-sky-500/10 text-sky-700 dark:text-sky-300 font-bold text-xs border border-sky-500/20">
+          <span className="px-3 py-1 rounded-xl bg-sky-500/15 text-sky-700 dark:text-sky-300 font-bold text-xs border border-sky-500/30">
             الفصل {currentQuestion.chapter}: {currentQuestion.chapterTitle}
           </span>
-          <span className="px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-semibold text-xs font-english">
+          <span className="px-2.5 py-1 rounded-xl theme-muted-box font-semibold text-xs font-english border">
             Q {currentIndex + 1} / {questions.length}
           </span>
-          <span className="text-xs text-slate-400 font-english hidden sm:inline">
+          <span className="text-xs theme-text-muted font-english hidden sm:inline">
             (Question #{currentQuestion.id})
           </span>
         </div>
@@ -93,8 +92,8 @@ export const QuestionCard: React.FC = () => {
             onClick={() => toggleBookmark(currentQuestion.id)}
             className={`p-2 rounded-xl transition-all border ${
               isBookmarked
-                ? 'bg-amber-500/10 text-amber-500 border-amber-500/30 font-bold'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-400 border-transparent hover:text-slate-700 dark:hover:text-slate-200'
+                ? 'bg-amber-500/20 text-amber-500 border-amber-500/40 font-bold'
+                : 'theme-muted-box border hover:opacity-100 opacity-70'
             }`}
             title={isBookmarked ? 'إزالة من المميزة' : 'إضافة للأسئلة المميزة للمراجعة'}
           >
@@ -104,7 +103,7 @@ export const QuestionCard: React.FC = () => {
           {/* Copy Question */}
           <button
             onClick={handleCopy}
-            className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-white border border-transparent transition-all"
+            className="p-2 rounded-xl theme-muted-box border hover:opacity-100 opacity-70 transition-all"
             title="نسخ السؤال مع الخيارات والشرح"
           >
             {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
@@ -112,9 +111,9 @@ export const QuestionCard: React.FC = () => {
         </div>
       </div>
 
-      {/* Chapter Context Note (if present, e.g. NumPy / Pandas setup in Ch 2) */}
+      {/* Chapter Context Note (e.g. NumPy / Pandas setup in Ch 2) */}
       {currentQuestion.contextNote && (
-        <div className="mt-4 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 text-xs font-code text-slate-600 dark:text-slate-300 flex items-start gap-2.5">
+        <div className="mt-4 p-3.5 rounded-2xl theme-muted-box border text-xs font-code flex items-start gap-2.5">
           <Terminal className="w-4 h-4 text-sky-500 shrink-0 mt-0.5" />
           <div className="leading-relaxed">
             <span className="font-bold text-sky-600 dark:text-sky-400">Context: </span>
@@ -125,8 +124,8 @@ export const QuestionCard: React.FC = () => {
 
       {/* Question Text */}
       <div className="my-6" dir="ltr">
-        <h2 className={`font-english font-semibold text-slate-900 dark:text-white ${questionSizeClass}`}>
-          <span className="text-sky-600 dark:text-sky-400 font-bold ml-1">
+        <h2 className={`font-english font-semibold theme-text-primary ${questionSizeClass}`}>
+          <span className="text-sky-600 dark:text-sky-400 font-bold mr-1">
             Question {currentQuestion.questionNumber}:{' '}
           </span>
           {currentQuestion.questionText}
@@ -140,35 +139,35 @@ export const QuestionCard: React.FC = () => {
           const isSelected = userAnswer === key;
           const isCorrectAnswer = currentQuestion.correctAnswer === key;
 
-          let optionStyle =
-            'bg-slate-50 dark:bg-slate-800/60 border-black/8 dark:border-white/8 text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 hover:border-sky-400/50';
-          let badgeStyle = 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300';
+          let optionStyle = 'theme-option border';
+          let badgeStyle = 'theme-muted-box border';
           let statusIcon = null;
 
           if (isAnswered && (instantFeedback || isExamSubmitted)) {
             if (isCorrectAnswer) {
               optionStyle =
-                'bg-emerald-500/15 border-emerald-500 text-emerald-950 dark:text-emerald-100 font-medium shadow-sm';
-              badgeStyle = 'bg-emerald-500 text-white font-bold';
-              statusIcon = <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />;
+                'bg-emerald-500/20 border-emerald-500 text-emerald-950 dark:text-emerald-100 font-semibold shadow-xs ring-1 ring-emerald-500/50';
+              badgeStyle = 'bg-emerald-500 text-white font-bold border-emerald-600';
+              statusIcon = <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />;
             } else if (isSelected && !isCorrectAnswer) {
               optionStyle =
-                'bg-rose-500/15 border-rose-500 text-rose-950 dark:text-rose-100 shadow-sm';
-              badgeStyle = 'bg-rose-500 text-white font-bold';
-              statusIcon = <XCircle className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0" />;
+                'bg-rose-500/20 border-rose-500 text-rose-950 dark:text-rose-100 font-medium shadow-xs ring-1 ring-rose-500/50';
+              badgeStyle = 'bg-rose-500 text-white font-bold border-rose-600';
+              statusIcon = <XCircle className="w-5 h-5 text-rose-500 shrink-0" />;
             } else {
-              optionStyle = 'opacity-60 bg-slate-50/50 dark:bg-slate-900/50 border-black/5 dark:border-white/5';
+              optionStyle = 'opacity-40 theme-option border';
             }
           } else if (isSelected) {
-            optionStyle = 'bg-sky-500/15 border-sky-500 text-sky-950 dark:text-sky-100 font-medium ring-1 ring-sky-500';
-            badgeStyle = 'bg-sky-500 text-white font-bold';
+            optionStyle =
+              'bg-sky-500/20 border-sky-500 font-semibold ring-1 ring-sky-500 shadow-xs';
+            badgeStyle = 'bg-sky-500 text-white font-bold border-sky-600';
           }
 
           return (
             <button
               key={key}
               onClick={() => selectAnswer(currentQuestion.id, key)}
-              className={`w-full text-left p-4 sm:p-4.5 rounded-2xl border transition-all flex items-center justify-between gap-4 cursor-pointer ${optionStyle}`}
+              className={`w-full text-left p-4 sm:p-4.5 rounded-2xl transition-all flex items-center justify-between gap-4 cursor-pointer ${optionStyle}`}
             >
               <div className="flex items-center gap-3.5 flex-1">
                 <span
