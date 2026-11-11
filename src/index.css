@@ -95,6 +95,11 @@ body {
   min-height: 100vh;
 }
 
+/* Force pointer cursor on all buttons and interactive elements */
+button, [role="button"], input[type="button"], input[type="submit"], select {
+  cursor: pointer !important;
+}
+
 /* Custom Semantic Theme Classes that dynamically respond to data-theme */
 .theme-card {
   background-color: var(--bg-card);

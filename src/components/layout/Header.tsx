@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuiz } from '../../context/QuizContext';
 import { ThemeSelector } from '../common/ThemeSelector';
-import { Volume2, VolumeX, Lightbulb, Grid, CheckCircle2 } from 'lucide-react';
+import { Volume2, VolumeX, Lightbulb, Grid, CheckCircle2, RotateCcw, Check } from 'lucide-react';
 
 interface HeaderProps {
   onToggleDrawer: () => void;
@@ -17,7 +17,16 @@ export const Header: React.FC<HeaderProps> = ({ onToggleDrawer, isDrawerOpen }) 
     setSoundEnabled,
     score,
     mode,
+    resetQuiz,
   } = useQuiz();
+
+  const [resetHeaderToast, setResetHeaderToast] = useState(false);
+
+  const handleHeaderReset = () => {
+    resetQuiz();
+    setResetHeaderToast(true);
+    setTimeout(() => setResetHeaderToast(false), 2000);
+  };
 
   return (
     <header className="sticky top-0 z-30 border-b theme-border backdrop-blur-md theme-surface transition-colors">
@@ -44,7 +53,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleDrawer, isDrawerOpen }) 
 
         {/* Live Quiz Stats */}
         {mode !== 'study' && (
-          <div className="hidden md:flex items-center gap-4 px-3 py-1.5 rounded-2xl theme-muted-box border text-xs font-medium">
+          <div className="hidden md:flex items-center gap-3 px-3 py-1.5 rounded-2xl theme-muted-box border text-xs font-medium">
             <div className="flex items-center gap-1.5 theme-text-secondary">
               <span className="w-2 h-2 rounded-full bg-sky-500"></span>
               <span>المجاب:</span>
@@ -65,6 +74,25 @@ export const Header: React.FC<HeaderProps> = ({ onToggleDrawer, isDrawerOpen }) 
                   <span>النسبة:</span>
                   <span className="font-bold font-english">{score.percentage}%</span>
                 </div>
+                <div className="w-px h-4 theme-border bg-current opacity-20"></div>
+                {/* Header Reset Button */}
+                <button
+                  onClick={handleHeaderReset}
+                  className="flex items-center gap-1 text-[11px] text-rose-500 hover:text-rose-600 hover:underline transition-all"
+                  title="تصفح الكويز من البداية وتصفير الإجابات"
+                >
+                  {resetHeaderToast ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-500" />
+                      <span className="text-emerald-500 font-bold">تم التصفير</span>
+                    </>
+                  ) : (
+                    <>
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      <span>تصفير</span>
+                    </>
+                  )}
+                </button>
               </>
             )}
           </div>

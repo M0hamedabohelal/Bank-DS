@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuiz } from '../../context/QuizContext';
-import { ChevronRight, ChevronLeft, Award, RotateCcw } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Award, RotateCcw, Check } from 'lucide-react';
 
 interface QuizControlsProps {
   onShowResults: () => void;
@@ -18,6 +18,8 @@ export const QuizControls: React.FC<QuizControlsProps> = ({ onShowResults }) => 
     score,
   } = useQuiz();
 
+  const [justReset, setJustReset] = useState(false);
+
   const isFirst = currentIndex === 0;
   const isLast = currentIndex === questions.length - 1;
   const progressPercent = Math.round(((currentIndex + 1) / questions.length) * 100);
@@ -26,6 +28,14 @@ export const QuizControls: React.FC<QuizControlsProps> = ({ onShowResults }) => 
   const handleSubmit = () => {
     submitExam();
     onShowResults();
+  };
+
+  const handleReset = () => {
+    resetQuiz();
+    setJustReset(true);
+    setTimeout(() => {
+      setJustReset(false);
+    }, 2000);
   };
 
   return (
@@ -55,12 +65,35 @@ export const QuizControls: React.FC<QuizControlsProps> = ({ onShowResults }) => 
         </button>
 
         {/* Middle Quick Actions */}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {/* Question Indicator */}
-          <div className="px-3 py-1.5 rounded-xl theme-muted-box border text-xs font-semibold theme-text-secondary">
+          <div className="px-3 py-2 rounded-xl theme-muted-box border text-xs font-semibold theme-text-secondary">
             سؤال <span className="font-english font-bold text-sky-500">{currentIndex + 1}</span> من{' '}
             <span className="font-english font-bold">{questions.length}</span>
           </div>
+
+          {/* Dedicated Reset Quiz Button with full zeroing */}
+          <button
+            onClick={handleReset}
+            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all border ${
+              justReset
+                ? 'bg-emerald-500 text-white border-emerald-600 shadow-sm'
+                : 'theme-muted-box border hover:bg-rose-500/15 hover:text-rose-500 hover:border-rose-500/30'
+            }`}
+            title="تصفير كافة الإجابات والبدء من السؤال الأول"
+          >
+            {justReset ? (
+              <>
+                <Check className="w-4 h-4" />
+                <span>تم تصفير الإجابات!</span>
+              </>
+            ) : (
+              <>
+                <RotateCcw className="w-4 h-4 text-rose-500" />
+                <span>إعادة الكويز (تصفير)</span>
+              </>
+            )}
+          </button>
 
           {/* Submit / Results Button */}
           {(allAnswered || score.answered >= 5 || isLast) && (
@@ -72,15 +105,6 @@ export const QuizControls: React.FC<QuizControlsProps> = ({ onShowResults }) => 
               <span>{isExamSubmitted ? 'عرض بطاقة النتيجة' : 'إنهاء وحساب النتيجة'}</span>
             </button>
           )}
-
-          {/* Reset Quiz */}
-          <button
-            onClick={resetQuiz}
-            className="p-2 rounded-xl theme-muted-box border hover:opacity-100 opacity-60 transition-colors"
-            title="إعادة تعيين الإجابات والبدء من جديد"
-          >
-            <RotateCcw className="w-4 h-4" />
-          </button>
         </div>
 
         {/* Next Button */}

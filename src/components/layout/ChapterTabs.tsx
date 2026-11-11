@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuiz } from '../../context/QuizContext';
 import { CHAPTERS } from '../../data/chapters';
-import { BookOpen, Zap, Bookmark, Layers, Shuffle } from 'lucide-react';
+import { BookOpen, Bookmark, Layers, Shuffle } from 'lucide-react';
 
 export const ChapterTabs: React.FC = () => {
   const { mode, selectedChapter, setMode, bookmarks, shuffleQuestions } = useQuiz();
@@ -59,20 +59,6 @@ export const ChapterTabs: React.FC = () => {
         >
           <Layers className="w-4 h-4" />
           <span>الشامل (100 سؤال)</span>
-        </button>
-
-        {/* Sprint Mode: 20 Random */}
-        <button
-          onClick={() => setMode('sprint')}
-          className={`flex items-center gap-1.5 px-3 py-2 rounded-2xl text-xs sm:text-sm font-semibold transition-all border ${
-            mode === 'sprint'
-              ? 'bg-amber-500 text-white border-amber-600 shadow-sm'
-              : 'theme-muted-box border hover:opacity-100 opacity-80'
-          }`}
-          title="20 سؤال عشوائي من كل الفصول لاختبار سريع"
-        >
-          <Zap className="w-4 h-4" />
-          <span>سبرنت سريع (20)</span>
         </button>
 
         {/* Study & Browse Mode */}
