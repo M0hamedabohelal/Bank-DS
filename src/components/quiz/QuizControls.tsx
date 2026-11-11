@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuiz } from '../../context/QuizContext';
-import { ChevronRight, ChevronLeft, Award, RotateCcw, Check } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Award, RotateCcw, Check, Zap } from 'lucide-react';
 
 interface QuizControlsProps {
   onShowResults: () => void;
@@ -16,6 +16,8 @@ export const QuizControls: React.FC<QuizControlsProps> = ({ onShowResults }) => 
     submitExam,
     isExamSubmitted,
     score,
+    autoNext,
+    setAutoNext,
   } = useQuiz();
 
   const [justReset, setJustReset] = useState(false);
@@ -72,6 +74,20 @@ export const QuizControls: React.FC<QuizControlsProps> = ({ onShowResults }) => 
             <span className="font-english font-bold">{questions.length}</span>
           </div>
 
+          {/* Auto Next Toggle */}
+          <button
+            onClick={() => setAutoNext(!autoNext)}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all border ${
+              autoNext
+                ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30'
+                : 'theme-muted-box border opacity-60 hover:opacity-100'
+            }`}
+            title="عند تفعيله: الانتقال التلقائي للسؤال التالي فور اختيار الإجابة الصحيحة"
+          >
+            <Zap className={`w-3.5 h-3.5 ${autoNext ? 'fill-current' : ''}`} />
+            <span>نقل تلقائي {autoNext ? '⚡' : ''}</span>
+          </button>
+
           {/* Dedicated Reset Quiz Button with full zeroing */}
           <button
             onClick={handleReset}
@@ -90,7 +106,7 @@ export const QuizControls: React.FC<QuizControlsProps> = ({ onShowResults }) => 
             ) : (
               <>
                 <RotateCcw className="w-4 h-4 text-rose-500" />
-                <span>إعادة الكويز (تصفير)</span>
+                <span>تصفير الإجابات</span>
               </>
             )}
           </button>

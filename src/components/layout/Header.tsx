@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuiz } from '../../context/QuizContext';
 import { ThemeSelector } from '../common/ThemeSelector';
-import { Volume2, VolumeX, Lightbulb, Grid, CheckCircle2, RotateCcw, Check } from 'lucide-react';
+import { Volume2, VolumeX, Lightbulb, Grid, CheckCircle2, RotateCcw, Check, Zap } from 'lucide-react';
 
 interface HeaderProps {
   onToggleDrawer: () => void;
@@ -13,6 +13,8 @@ export const Header: React.FC<HeaderProps> = ({ onToggleDrawer, isDrawerOpen }) 
     questions,
     instantFeedback,
     setInstantFeedback,
+    autoNext,
+    setAutoNext,
     soundEnabled,
     setSoundEnabled,
     score,
@@ -104,6 +106,28 @@ export const Header: React.FC<HeaderProps> = ({ onToggleDrawer, isDrawerOpen }) 
           <ThemeSelector />
 
           <div className="h-6 w-px theme-border bg-current opacity-20 mx-1 hidden sm:block"></div>
+
+          {/* Auto Next on Correct Toggle Button */}
+          {mode !== 'study' && (
+            <button
+              onClick={() => setAutoNext(!autoNext)}
+              className={`p-2 rounded-xl transition-all border flex items-center gap-1 text-xs font-semibold ${
+                autoNext
+                  ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/40 ring-1 ring-emerald-500/30'
+                  : 'theme-muted-box border opacity-60 hover:opacity-100'
+              }`}
+              title={
+                autoNext
+                  ? 'النقل التلقائي مفعل (ينتقل للسؤال التالي فور اختيار الإجابة الصحيحة)'
+                  : 'تفعيل النقل التلقائي عند الإجابة الصحيحة'
+              }
+            >
+              <Zap className={`w-4 h-4 ${autoNext ? 'fill-current' : ''}`} />
+              <span className="hidden xl:inline">
+                {autoNext ? 'نقل تلقائي: مفعل ⚡' : 'نقل تلقائي: معطل'}
+              </span>
+            </button>
+          )}
 
           {/* Quick Sound Toggle */}
           <button

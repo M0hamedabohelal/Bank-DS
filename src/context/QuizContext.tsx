@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
-import { Question, ChoiceKey, QuizMode } from '../types/quiz';
+import React, { createContext, useContext, useState, useEffect, useMemo, useRef } from 'react';
+import type { Question, ChoiceKey, QuizMode } from '../types/quiz';
 import { allQuestions, getQuestionsByChapter } from '../data/questions';
 import { sound } from '../utils/sound';
 import confetti from 'canvas-confetti';
@@ -13,6 +13,7 @@ interface QuizContextType {
   answers: Record<number, ChoiceKey>;
   bookmarks: Set<number>;
   instantFeedback: boolean;
+  autoNext: boolean;
   isExamSubmitted: boolean;
   soundEnabled: boolean;
   score: {
@@ -25,6 +26,7 @@ interface QuizContextType {
   selectAnswer: (questionId: number, answer: ChoiceKey) => void;
   toggleBookmark: (questionId: number) => void;
   setInstantFeedback: (enabled: boolean) => void;
+  setAutoNext: (enabled: boolean) => void;
   setSoundEnabled: (enabled: boolean) => void;
   goToQuestion: (index: number) => void;
   nextQuestion: () => void;
@@ -54,8 +56,14 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const saved = localStorage.getItem('cs314_instant_feedback');
     return saved !== null ? saved === 'true' : true;
   });
+  const [autoNext, setAutoNextState] = useState<boolean>(() => {
+    const saved = localStorage.getItem('cs314_auto_next');
+    return saved !== null ? saved === 'true' : true; // Default to true as user requested
+  });
   const [isExamSubmitted, setIsExamSubmitted] = useState<boolean>(false);
   const [soundEnabled, setSoundEnabledState] = useState<boolean>(sound.isEnabled());
+
+  const autoNextTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Save bookmarks
   useEffect(() => {
@@ -64,6 +72,7 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Handle mode / chapter changes
   const setMode = (newMode: QuizMode, chapterId?: number) => {
+    if (autoNextTimeoutRef.current) clearTimeout(autoNextTimeoutRef.current);
     setModeState(newMode);
     setCurrentIndex(0);
     setAnswers({});
@@ -76,11 +85,6 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } else if (newMode === 'all') {
       setSelectedChapter(null);
       setQuestions([...allQuestions]);
-    } else if (newMode === 'sprint') {
-      setSelectedChapter(null);
-      // Pick 20 random mixed questions
-      const shuffled = [...allQuestions].sort(() => Math.random() - 0.5).slice(0, 20);
-      setQuestions(shuffled);
     } else if (newMode === 'study') {
       if (chapterId) {
         setSelectedChapter(chapterId);
@@ -97,6 +101,7 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const shuffleQuestions = () => {
+    if (autoNextTimeoutRef.current) clearTimeout(autoNextTimeoutRef.current);
     setQuestions((prev) => [...prev].sort(() => Math.random() - 0.5));
     setCurrentIndex(0);
     setAnswers({});
@@ -104,8 +109,6 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const selectAnswer = (questionId: number, answer: ChoiceKey) => {
-    // If already answered and instant feedback is active, allow review or toggle?
-    // In quiz practice, user selects option. If instant feedback is on, play sound.
     const question = allQuestions.find((q) => q.id === questionId);
     if (!question) return;
 
@@ -122,6 +125,19 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } else {
         sound.playIncorrect();
       }
+    }
+
+    // Auto next on CORRECT answer
+    if (autoNext && answer === question.correctAnswer) {
+      if (autoNextTimeoutRef.current) clearTimeout(autoNextTimeoutRef.current);
+      autoNextTimeoutRef.current = setTimeout(() => {
+        setCurrentIndex((prev) => {
+          if (prev < questions.length - 1) {
+            return prev + 1;
+          }
+          return prev;
+        });
+      }, 750);
     }
   };
 
@@ -142,36 +158,46 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem('cs314_instant_feedback', String(enabled));
   };
 
+  const setAutoNext = (enabled: boolean) => {
+    setAutoNextState(enabled);
+    localStorage.setItem('cs314_auto_next', String(enabled));
+  };
+
   const setSoundEnabled = (enabled: boolean) => {
     setSoundEnabledState(enabled);
     sound.setEnabled(enabled);
   };
 
   const goToQuestion = (index: number) => {
+    if (autoNextTimeoutRef.current) clearTimeout(autoNextTimeoutRef.current);
     if (index >= 0 && index < questions.length) {
       setCurrentIndex(index);
     }
   };
 
   const nextQuestion = () => {
+    if (autoNextTimeoutRef.current) clearTimeout(autoNextTimeoutRef.current);
     if (currentIndex < questions.length - 1) {
       setCurrentIndex((prev) => prev + 1);
     }
   };
 
   const prevQuestion = () => {
+    if (autoNextTimeoutRef.current) clearTimeout(autoNextTimeoutRef.current);
     if (currentIndex > 0) {
       setCurrentIndex((prev) => prev - 1);
     }
   };
 
   const resetQuiz = () => {
+    if (autoNextTimeoutRef.current) clearTimeout(autoNextTimeoutRef.current);
     setAnswers({});
     setCurrentIndex(0);
     setIsExamSubmitted(false);
   };
 
   const submitExam = () => {
+    if (autoNextTimeoutRef.current) clearTimeout(autoNextTimeoutRef.current);
     setIsExamSubmitted(true);
     sound.playFinish();
     confetti({
@@ -215,6 +241,7 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
         answers,
         bookmarks,
         instantFeedback,
+        autoNext,
         isExamSubmitted,
         soundEnabled,
         score,
@@ -222,6 +249,7 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
         selectAnswer,
         toggleBookmark,
         setInstantFeedback,
+        setAutoNext,
         setSoundEnabled,
         goToQuestion,
         nextQuestion,
