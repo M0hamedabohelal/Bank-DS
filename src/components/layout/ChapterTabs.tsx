@@ -13,7 +13,7 @@ export const ChapterTabs: React.FC = () => {
 
   return (
     <div className="w-full theme-surface border-b theme-border py-2 px-3 sm:px-6 overflow-x-auto no-scrollbar">
-      <div className="max-w-7xl mx-auto flex items-center gap-1.5 sm:gap-2 min-w-max">
+      <div className="max-w-4xl mx-auto flex items-center justify-start sm:justify-center gap-1.5 sm:gap-2 min-w-max sm:min-w-0">
         {/* Chapters 1 to 5 - independent from study mode */}
         <div className="flex items-center gap-1 p-0.5 sm:p-1 rounded-2xl theme-muted-box border">
           {CHAPTERS.map((ch) => {

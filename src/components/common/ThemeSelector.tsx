@@ -44,32 +44,36 @@ export const ThemeSelector: React.FC = () => {
   ];
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
-      {/* Themes Buttons */}
-      <div className="inline-flex items-center gap-1 p-1 rounded-2xl theme-muted-box border">
+    <div className="flex items-center gap-1.5 shrink-0">
+      {/* Themes Buttons - Compact & Elegant */}
+      <div className="inline-flex items-center gap-0.5 p-0.5 sm:p-1 rounded-2xl theme-muted-box border">
         {themes.map((t) => {
           const isActive = theme === t.id;
           return (
             <button
               key={t.id}
               onClick={() => setTheme(t.id)}
-              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs transition-all border ${
+              className={`flex items-center gap-1 px-2 py-1 rounded-xl text-xs transition-all border ${
                 isActive
-                  ? `${t.activeStyle} font-bold scale-102`
-                  : 'border-transparent theme-text-secondary hover:theme-text-primary hover:bg-black/5 dark:hover:bg-white/5 opacity-80 hover:opacity-100'
+                  ? `${t.activeStyle} font-bold shadow-xs scale-102`
+                  : 'border-transparent theme-text-secondary hover:theme-text-primary hover:bg-black/5 dark:hover:bg-white/5 opacity-70 hover:opacity-100'
               }`}
               title={t.label}
             >
-              <span className={`w-2 h-2 rounded-full ${t.dotColor}`}></span>
+              <span className={`w-1.5 h-1.5 rounded-full ${t.dotColor}`}></span>
               {t.icon}
-              <span className="hidden sm:inline">{t.label}</span>
+              {isActive && (
+                <span className="text-[11px] font-bold whitespace-nowrap hidden sm:inline">
+                  {t.label}
+                </span>
+              )}
             </button>
           );
         })}
       </div>
 
       {/* Font Size Selector */}
-      <div className="inline-flex items-center gap-0.5 p-1 rounded-2xl theme-muted-box border">
+      <div className="inline-flex items-center gap-0.5 p-0.5 sm:p-1 rounded-2xl theme-muted-box border">
         <button
           onClick={() => setFontSize('normal')}
           className={`px-2 py-1 rounded-lg text-xs transition-all border ${

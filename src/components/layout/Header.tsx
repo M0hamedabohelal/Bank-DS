@@ -45,8 +45,8 @@ export const Header: React.FC<HeaderProps> = ({ onToggleDrawer, isDrawerOpen }) 
 
   return (
     <>
-      <header className="sticky top-0 z-30 border-b theme-border backdrop-blur-md theme-surface transition-colors">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-2">
+      <header className="sticky top-0 z-30 border-b theme-border backdrop-blur-md theme-surface transition-colors w-full">
+        <div className="max-w-4xl mx-auto px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-2">
           {/* Right side: Brand / Logo */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-sky-500/20 font-bold text-sm sm:text-base shrink-0">
@@ -77,49 +77,21 @@ export const Header: React.FC<HeaderProps> = ({ onToggleDrawer, isDrawerOpen }) 
             </div>
           )}
 
-          {/* Desktop Live Quiz Stats */}
-          {mode !== 'study' && (
-            <div className="hidden xl:flex items-center gap-3 px-3 py-1.5 rounded-2xl theme-muted-box border text-xs font-medium">
-              <div className="flex items-center gap-1.5 theme-text-secondary">
-                <span className="w-2 h-2 rounded-full bg-sky-500"></span>
-                <span>المجاب:</span>
-                <span className="font-bold font-english theme-text-primary">
-                  {score.answered} / {questions.length}
-                </span>
-              </div>
-              <div className="w-px h-4 theme-border bg-current opacity-20"></div>
-              <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>صحيح:</span>
-                <span className="font-bold font-english">{score.correct}</span>
-              </div>
-              {score.answered > 0 && (
-                <>
-                  <div className="w-px h-4 theme-border bg-current opacity-20"></div>
-                  <div className="flex items-center gap-1 text-sky-600 dark:text-sky-400">
-                    <span>النسبة:</span>
-                    <span className="font-bold font-english">{score.percentage}%</span>
-                  </div>
-                  <div className="w-px h-4 theme-border bg-current opacity-20"></div>
-                  <button
-                    onClick={handleHeaderReset}
-                    className="flex items-center gap-1 text-[11px] text-rose-500 hover:text-rose-600 hover:underline transition-all"
-                    title="تصفير الإجابات"
-                  >
-                    {resetHeaderToast ? (
-                      <>
-                        <Check className="w-3.5 h-3.5 text-emerald-500" />
-                        <span className="text-emerald-500 font-bold">تم التصفير</span>
-                      </>
-                    ) : (
-                      <>
-                        <RotateCcw className="w-3.5 h-3.5" />
-                        <span>تصفير</span>
-                      </>
-                    )}
-                  </button>
-                </>
-              )}
+          {/* Desktop Live Quiz Stats - Compact */}
+          {mode !== 'study' && score.answered > 0 && (
+            <div className="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded-xl theme-muted-box border text-[11px] font-medium shrink-0">
+              <span className="font-bold font-english text-sky-500">{score.answered}/{questions.length}</span>
+              <span className="opacity-30">•</span>
+              <span className="text-emerald-500 font-bold font-english">{score.correct} صح</span>
+              <span className="opacity-30">•</span>
+              <span className="font-bold font-english">{score.percentage}%</span>
+              <button
+                onClick={handleHeaderReset}
+                className="text-[10px] text-rose-500 hover:underline mr-1 font-semibold"
+                title="تصفير الإجابات"
+              >
+                {resetHeaderToast ? 'تم' : 'تصفير'}
+              </button>
             </div>
           )}
 
