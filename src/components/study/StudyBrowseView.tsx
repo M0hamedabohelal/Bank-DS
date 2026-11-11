@@ -2,12 +2,12 @@ import React, { useState, useMemo } from 'react';
 import { useQuiz } from '../../context/QuizContext';
 import { allQuestions } from '../../data/questions';
 import { CHAPTERS } from '../../data/chapters';
-import { Search, Bookmark, CheckCircle2, BookOpen, Sparkles, Terminal, Play, ArrowLeft } from 'lucide-react';
+import { Search, Bookmark, CheckCircle2, BookOpen, Sparkles, Terminal } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import type { ChoiceKey } from '../../types/quiz';
 
 export const StudyBrowseView: React.FC = () => {
-  const { bookmarks, toggleBookmark, toggleStudyMode } = useQuiz();
+  const { bookmarks, toggleBookmark } = useQuiz();
   const { fontSize } = useTheme();
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -46,35 +46,7 @@ export const StudyBrowseView: React.FC = () => {
   const optionKeys: ChoiceKey[] = ['A', 'B', 'C', 'D'];
 
   return (
-    <div className="w-full space-y-6 pb-20">
-      {/* Return to Quiz Header Banner - Highly visible */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 sm:p-5 rounded-3xl bg-gradient-to-r from-sky-500/15 via-emerald-500/15 to-indigo-500/15 border-2 border-sky-500/30 shadow-sm">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-sky-500 text-white flex items-center justify-center shadow-md shadow-sky-500/20 shrink-0">
-            <BookOpen className="w-5 h-5" />
-          </div>
-          <div>
-            <h3 className="text-sm sm:text-base font-bold theme-text-primary flex items-center gap-2">
-              <span>وضع المراجعة والشرح الشامل</span>
-              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
-                قراءة وحفظ
-              </span>
-            </h3>
-            <p className="text-xs theme-text-muted mt-0.5">
-              تصفح الأسئلة مع الحل والشروحات. للعودة لحل الأسئلة تفاعلياً، اضغط الزر الأزرق أو اختر أي فصل بالأعلى.
-            </p>
-          </div>
-        </div>
-        <button
-          onClick={toggleStudyMode}
-          className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl bg-sky-500 hover:bg-sky-600 text-white text-xs sm:text-sm font-extrabold shadow-md shadow-sky-500/25 transition-all hover:scale-102 active:scale-98 shrink-0 cursor-pointer"
-          title="العودة لوضع الكويز التفاعلي وحل الأسئلة"
-        >
-          <Play className="w-4 h-4 fill-current" />
-          <span>العودة إلى وضع الكويز ↩</span>
-        </button>
-      </div>
-
+    <div className="w-full space-y-6">
       {/* Search & Filter Header */}
       <div className="theme-card p-4 sm:p-5 rounded-3xl border shadow-sm space-y-4">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
@@ -260,18 +232,6 @@ export const StudyBrowseView: React.FC = () => {
             </p>
           </div>
         )}
-      </div>
-
-      {/* Floating Sticky Return Button at Bottom */}
-      <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40">
-        <button
-          onClick={toggleStudyMode}
-          className="flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white font-extrabold text-xs sm:text-sm shadow-2xl shadow-sky-500/50 border border-white/30 transition-all hover:scale-105 active:scale-95 cursor-pointer backdrop-blur-md"
-          title="العودة لوضع الكويز والتفاعل"
-        >
-          <Play className="w-4 h-4 fill-current" />
-          <span>العودة إلى وضع الكويز ↩</span>
-        </button>
       </div>
     </div>
   );
