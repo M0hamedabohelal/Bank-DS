@@ -12,6 +12,7 @@ import {
   Check,
   Zap,
   SlidersHorizontal,
+  Play,
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -32,6 +33,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleDrawer, isDrawerOpen }) 
     score,
     mode,
     resetQuiz,
+    toggleStudyMode,
   } = useQuiz();
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -67,13 +69,36 @@ export const Header: React.FC<HeaderProps> = ({ onToggleDrawer, isDrawerOpen }) 
             </div>
           </div>
 
-          {/* Center on Mobile: Sleek Question Counter */}
-          <div className="flex sm:hidden items-center gap-1 px-2.5 py-1 rounded-xl theme-muted-box border text-[11px] font-bold font-english text-sky-500">
-            <span>Q</span>
-            <span>{currentIndex + 1}</span>
-            <span className="opacity-40">/</span>
-            <span>{questions.length}</span>
-          </div>
+          {/* Center on Mobile: Sleek Question Counter (or Return to Quiz button if in Study Mode) */}
+          {mode !== 'study' ? (
+            <div className="flex sm:hidden items-center gap-1 px-2.5 py-1 rounded-xl theme-muted-box border text-[11px] font-bold font-english text-sky-500">
+              <span>Q</span>
+              <span>{currentIndex + 1}</span>
+              <span className="opacity-40">/</span>
+              <span>{questions.length}</span>
+            </div>
+          ) : (
+            <button
+              onClick={toggleStudyMode}
+              className="flex sm:hidden items-center gap-1.5 px-3 py-1 rounded-xl bg-sky-500 hover:bg-sky-600 text-white text-[11px] font-bold shadow-xs transition-all active:scale-95 cursor-pointer"
+              title="العودة لوضع الكويز"
+            >
+              <Play className="w-3 h-3 fill-current" />
+              <span>بدء الكويز</span>
+            </button>
+          )}
+
+          {/* Center on Desktop when in Study Mode: Return to Quiz CTA */}
+          {mode === 'study' && (
+            <button
+              onClick={toggleStudyMode}
+              className="hidden sm:flex items-center gap-2 px-4 py-1.5 rounded-2xl bg-sky-500 hover:bg-sky-600 text-white text-xs font-bold shadow-sm transition-all hover:scale-102 active:scale-98 cursor-pointer"
+              title="العودة إلى وضع الكويز التفاعلي"
+            >
+              <Play className="w-3.5 h-3.5 fill-current" />
+              <span>العودة إلى وضع الكويز ↩</span>
+            </button>
+          )}
 
           {/* Desktop Live Quiz Stats */}
           {mode !== 'study' && (

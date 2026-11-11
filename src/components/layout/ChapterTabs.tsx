@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuiz } from '../../context/QuizContext';
 import { CHAPTERS } from '../../data/chapters';
-import { BookOpen, Bookmark, Layers, Shuffle } from 'lucide-react';
+import { BookOpen, Bookmark, Layers, Shuffle, ArrowLeft } from 'lucide-react';
 
 export const ChapterTabs: React.FC = () => {
   const { mode, selectedChapter, setMode, toggleStudyMode, bookmarks, shuffleQuestions } = useQuiz();
@@ -63,21 +63,28 @@ export const ChapterTabs: React.FC = () => {
         {/* Study & Review Mode - Completely independent toggle */}
         <button
           onClick={toggleStudyMode}
-          className={`flex items-center gap-1.5 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-xl sm:rounded-2xl text-[11px] sm:text-xs font-semibold transition-all border ${
+          className={`flex items-center gap-1.5 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-xl sm:rounded-2xl text-[11px] sm:text-xs font-bold transition-all border ${
             mode === 'study'
-              ? 'bg-emerald-600 text-white border-emerald-700 shadow-xs font-bold ring-2 ring-emerald-500/30'
+              ? 'bg-amber-500 hover:bg-amber-600 text-white border-amber-600 shadow-md ring-2 ring-amber-400/40 animate-pulse-subtle'
               : 'theme-muted-box border hover:opacity-100 opacity-80'
           }`}
           title={
             mode === 'study'
-              ? 'اضغط مرة أخرى للعودة لوضع الكويز الطبيعي'
+              ? 'اضغط هنا للعودة فوراً لوضع الكويز التفاعلي'
               : 'تصفح بنك الأسئلة مع الحلول والشروحات كاملة'
           }
         >
-          <BookOpen className="w-3.5 h-3.5" />
-          <span>
-            {mode === 'study' ? 'وضع المراجعة والشرح (مفعّل ✓)' : 'وضع المراجعة والشرح'}
-          </span>
+          {mode === 'study' ? (
+            <>
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>إنهاء المراجعة (عودة للكويز ↩)</span>
+            </>
+          ) : (
+            <>
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>وضع المراجعة والشرح</span>
+            </>
+          )}
         </button>
 
         {/* Bookmarks */}
