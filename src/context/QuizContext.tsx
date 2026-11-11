@@ -23,6 +23,7 @@ interface QuizContextType {
     percentage: number;
   };
   setMode: (mode: QuizMode, chapterId?: number) => void;
+  toggleStudyMode: () => void;
   selectAnswer: (questionId: number, answer: ChoiceKey) => void;
   toggleBookmark: (questionId: number) => void;
   setInstantFeedback: (enabled: boolean) => void;
@@ -41,6 +42,8 @@ const QuizContext = createContext<QuizContextType | undefined>(undefined);
 export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [mode, setModeState] = useState<QuizMode>('chapter');
   const [selectedChapter, setSelectedChapter] = useState<number | null>(1);
+  const [lastQuizMode, setLastQuizMode] = useState<'chapter' | 'all'>('chapter');
+  const [lastChapter, setLastChapter] = useState<number>(1);
   const [questions, setQuestions] = useState<Question[]>(() => getQuestionsByChapter(1));
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [answers, setAnswers] = useState<Record<number, ChoiceKey>>({});
@@ -79,24 +82,45 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsExamSubmitted(false);
 
     if (newMode === 'chapter') {
-      const ch = chapterId || selectedChapter || 1;
+      const ch = chapterId || selectedChapter || lastChapter || 1;
       setSelectedChapter(ch);
+      setLastChapter(ch);
+      setLastQuizMode('chapter');
       setQuestions(getQuestionsByChapter(ch));
     } else if (newMode === 'all') {
       setSelectedChapter(null);
+      setLastQuizMode('all');
       setQuestions([...allQuestions]);
     } else if (newMode === 'study') {
-      if (chapterId) {
-        setSelectedChapter(chapterId);
-        setQuestions(getQuestionsByChapter(chapterId));
-      } else {
-        setSelectedChapter(null);
-        setQuestions([...allQuestions]);
-      }
+      // Review & study mode is independent of chapters!
+      setSelectedChapter(null);
+      setQuestions([...allQuestions]);
     } else if (newMode === 'bookmarks') {
       setSelectedChapter(null);
       const bookmarkedList = allQuestions.filter((q) => bookmarks.has(q.id));
       setQuestions(bookmarkedList.length > 0 ? bookmarkedList : getQuestionsByChapter(1));
+    }
+  };
+
+  // Toggle study / review mode on and off
+  const toggleStudyMode = () => {
+    if (autoNextTimeoutRef.current) clearTimeout(autoNextTimeoutRef.current);
+    if (mode === 'study') {
+      // Toggle OFF: return to normal quiz mode
+      if (lastQuizMode === 'all') {
+        setMode('all');
+      } else {
+        setMode('chapter', lastChapter || 1);
+      }
+    } else {
+      // Toggle ON: save current quiz context and enter independent study mode
+      if (mode === 'chapter') {
+        setLastQuizMode('chapter');
+        if (selectedChapter) setLastChapter(selectedChapter);
+      } else if (mode === 'all') {
+        setLastQuizMode('all');
+      }
+      setMode('study');
     }
   };
 
@@ -246,6 +270,7 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
         soundEnabled,
         score,
         setMode,
+        toggleStudyMode,
         selectAnswer,
         toggleBookmark,
         setInstantFeedback,

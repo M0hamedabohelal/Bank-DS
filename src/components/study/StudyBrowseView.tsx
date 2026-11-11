@@ -7,13 +7,11 @@ import { useTheme } from '../../context/ThemeContext';
 import type { ChoiceKey } from '../../types/quiz';
 
 export const StudyBrowseView: React.FC = () => {
-  const { bookmarks, toggleBookmark, selectedChapter } = useQuiz();
+  const { bookmarks, toggleBookmark, toggleStudyMode } = useQuiz();
   const { fontSize } = useTheme();
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeChapterFilter, setActiveChapterFilter] = useState<number | 'all'>(
-    selectedChapter || 'all'
-  );
+  const [activeChapterFilter, setActiveChapterFilter] = useState<number | 'all'>('all');
   const [onlyBookmarked, setOnlyBookmarked] = useState(false);
 
   const filteredQuestions = useMemo(() => {
@@ -49,6 +47,30 @@ export const StudyBrowseView: React.FC = () => {
 
   return (
     <div className="w-full space-y-6">
+      {/* Return to Quiz Header Banner */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-3.5 sm:p-4 rounded-3xl bg-emerald-500/10 border border-emerald-500/25">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+            <BookOpen className="w-4 h-4" />
+          </div>
+          <div>
+            <h3 className="text-xs sm:text-sm font-bold theme-text-primary">
+              وضع المراجعة والشرح المستقل (جميع الأسئلة والحلول مع الشرح)
+            </h3>
+            <p className="text-[11px] theme-text-muted">
+              يمكنك قراءة الأسئلة وحلولها والشروحات كاملة أو تصفية الفصول بحرية
+            </p>
+          </div>
+        </div>
+        <button
+          onClick={toggleStudyMode}
+          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition-all shrink-0 cursor-pointer"
+          title="العودة لوضع الكويز والتفاعل"
+        >
+          <span>العودة إلى وضع الكويز ↩</span>
+        </button>
+      </div>
+
       {/* Search & Filter Header */}
       <div className="theme-card p-4 sm:p-5 rounded-3xl border shadow-sm space-y-4">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
