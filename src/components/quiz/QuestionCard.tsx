@@ -56,65 +56,68 @@ export const QuestionCard: React.FC = () => {
 
   const questionSizeClass =
     fontSize === 'huge'
-      ? 'text-lg sm:text-2xl leading-relaxed'
+      ? 'text-base sm:text-xl md:text-2xl leading-relaxed'
       : fontSize === 'large'
-      ? 'text-base sm:text-xl leading-relaxed'
-      : 'text-sm sm:text-lg leading-relaxed';
+      ? 'text-sm sm:text-lg md:text-xl leading-relaxed'
+      : 'text-sm sm:text-base md:text-lg leading-relaxed';
 
   const optionSizeClass =
     fontSize === 'huge'
-      ? 'text-sm sm:text-lg leading-snug'
+      ? 'text-sm sm:text-base md:text-lg leading-snug'
       : fontSize === 'large'
-      ? 'text-xs sm:text-base leading-snug'
+      ? 'text-xs sm:text-sm md:text-base leading-snug'
       : 'text-xs sm:text-sm leading-snug';
 
   const optionKeys: ChoiceKey[] = ['A', 'B', 'C', 'D'];
 
   return (
-    <div className="w-full theme-card rounded-2xl sm:rounded-3xl p-4 sm:p-7 shadow-sm border transition-all">
+    <div className="w-full theme-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-sm border transition-all">
       {/* Top Meta Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-2 pb-3.5 border-b theme-border">
-        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-          <span className="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-xl bg-sky-500/15 text-sky-700 dark:text-sky-300 font-bold text-[11px] sm:text-xs border border-sky-500/30">
+      <div className="flex items-center justify-between gap-2 pb-3.5 border-b theme-border">
+        {/* Chapter Title Badge */}
+        <div className="flex items-center gap-1.5 min-w-0">
+          <span className="px-2.5 py-1 rounded-xl bg-sky-500/15 text-sky-700 dark:text-sky-300 font-bold text-[11px] sm:text-xs border border-sky-500/30 truncate">
             الفصل {currentQuestion.chapter}: {currentQuestion.chapterTitle}
           </span>
-          <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-xl theme-muted-box font-semibold text-[11px] sm:text-xs font-english border">
-            Q {currentIndex + 1} / {questions.length}
-          </span>
-          <span className="text-[11px] sm:text-xs theme-text-muted font-english hidden sm:inline">
+          <span className="text-[11px] font-english theme-text-muted hidden sm:inline">
             (#{currentQuestion.id})
           </span>
         </div>
 
-        <div className="flex items-center gap-1 sm:gap-1.5">
+        {/* Counter & Actions */}
+        <div className="flex items-center gap-1.5 shrink-0">
+          <span className="px-2 py-1 rounded-xl theme-muted-box font-bold text-[11px] font-english border">
+            {currentIndex + 1} / {questions.length}
+          </span>
+
           {/* Bookmark Button */}
           <button
             onClick={() => toggleBookmark(currentQuestion.id)}
-            className={`p-1.5 sm:p-2 rounded-xl transition-all border ${
+            className={`p-1.5 rounded-xl transition-all border ${
               isBookmarked
                 ? 'bg-amber-500/20 text-amber-500 border-amber-500/40 font-bold'
                 : 'theme-muted-box border hover:opacity-100 opacity-70'
             }`}
             title={isBookmarked ? 'إزالة من المميزة' : 'إضافة للأسئلة المميزة للمراجعة'}
           >
-            <Bookmark className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isBookmarked ? 'fill-current' : ''}`} />
+            <Bookmark className={`w-3.5 h-3.5 ${isBookmarked ? 'fill-current' : ''}`} />
           </button>
 
           {/* Copy Question */}
           <button
             onClick={handleCopy}
-            className="p-1.5 sm:p-2 rounded-xl theme-muted-box border hover:opacity-100 opacity-70 transition-all"
+            className="p-1.5 rounded-xl theme-muted-box border hover:opacity-100 opacity-70 transition-all"
             title="نسخ السؤال مع الخيارات والشرح"
           >
-            {copied ? <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
+            {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
           </button>
         </div>
       </div>
 
       {/* Chapter Context Note (e.g. NumPy / Pandas setup in Ch 2) */}
       {currentQuestion.contextNote && (
-        <div className="mt-3.5 p-3 rounded-xl sm:rounded-2xl theme-muted-box border text-[11px] sm:text-xs font-code flex items-start gap-2">
-          <Terminal className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-sky-500 shrink-0 mt-0.5" />
+        <div className="mt-3 p-3 rounded-xl theme-muted-box border text-[11px] sm:text-xs font-code flex items-start gap-2">
+          <Terminal className="w-3.5 h-3.5 text-sky-500 shrink-0 mt-0.5" />
           <div className="leading-relaxed">
             <span className="font-bold text-sky-600 dark:text-sky-400">Context: </span>
             {currentQuestion.contextNote}
@@ -167,9 +170,9 @@ export const QuestionCard: React.FC = () => {
             <button
               key={key}
               onClick={() => selectAnswer(currentQuestion.id, key)}
-              className={`w-full text-left p-3.5 sm:p-4.5 rounded-xl sm:rounded-2xl transition-all flex items-center justify-between gap-3 cursor-pointer ${optionStyle}`}
+              className={`w-full text-left p-3.5 sm:p-4 rounded-xl sm:rounded-2xl transition-all flex items-center justify-between gap-3 active:scale-[0.99] cursor-pointer ${optionStyle}`}
             >
-              <div className="flex items-center gap-2.5 sm:gap-3.5 flex-1 min-w-0">
+              <div className="flex items-center gap-2.5 sm:gap-3 flex-1 min-w-0">
                 <span
                   className={`w-6 h-6 sm:w-7 sm:h-7 rounded-lg sm:rounded-xl flex items-center justify-center font-bold text-xs font-english shrink-0 transition-transform ${badgeStyle}`}
                 >
